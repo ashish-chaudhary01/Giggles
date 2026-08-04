@@ -7,7 +7,7 @@ import dns from "dns";
 import fs from "fs";
 import path from "path";
 import job from "./lib/cron.js";
-import clerkWebhook from "../src/webhooks/clerk.webhook.js";
+import clerkWebhook from "./webhooks/clerk.webhook.js";
 
 //
 dns.setServers(["0.0.0.0", "8.8.8.8"]);
