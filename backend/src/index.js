@@ -6,6 +6,7 @@ import { connectDB } from "./lib/db.js";
 import dns from "dns";
 import fs from "fs";
 import path from "path";
+import job from "./lib/cron.js";
 
 //
 dns.setServers(["0.0.0.0", "8.8.8.8"]);
@@ -38,4 +39,7 @@ if (fs.existsSync(publicDir)) {
 app.listen(PORT, () => {
   connectDB();
   console.log(`Server is running on port: ${PORT}`);
+  if (process.env.NODE_ENV === "production") {
+    job.start();
+  }
 });
