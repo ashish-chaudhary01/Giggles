@@ -8,14 +8,16 @@ import fs from "fs";
 import path from "path";
 import job from "./lib/cron.js";
 import clerkWebhook from "./webhooks/clerk.webhook.js";
+import authRoutes from "./routes/auth.routes.js";
+import messageRoutes from "./routes/message.routes.js";
 
-//
 dns.setServers(["0.0.0.0", "8.8.8.8"]);
 const app = express();
 const PORT = process.env.PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 const publicDir = path.join(process.cwd(), "public");
 
+// webhook
 app.use(
   "/api/webhook/clerk",
   express.raw({ type: "application/json" }),
@@ -27,11 +29,16 @@ app.use(express.json());
 app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(clerkMiddleware());
 
-//
+// health api
 app.get("/health", (req, res) => {
   res.status(200).json({ ok: true });
 });
 
+// routes
+app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
+
+// it is for monolith deployment
 // if the public directory exists, serve the static files
 // this is for the production build
 if (fs.existsSync(publicDir)) {
