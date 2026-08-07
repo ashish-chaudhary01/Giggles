@@ -25,12 +25,10 @@ async function uploadChatMedia(file) {
       folder: "/chat",
       checks: "file.size < 25MB",
     });
-
-    console.log(result);
     return result.url;
   } catch (error) {
     console.error("ImageKit upload failed", error);
-    throw error;
+    throw error.message;
   }
 }
 

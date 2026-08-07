@@ -96,7 +96,7 @@ export async function sendMessage(req, res) {
     const url = await uploadChatMedia(req.file);
 
     if (req.file.mimetype.startsWith("image/")) imageUrl = url;
-    else imageUrl = url;
+    else videoUrl = url;
 
     const newMessage = await messageModel.create({
       senderId,
