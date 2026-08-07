@@ -1,4 +1,5 @@
 import uploadChatMedia from "../lib/imagekit.js";
+import { getReceiverSocketId } from "../lib/socket.js";
 import messageModel from "../models/message.model.js";
 import userModel from "../models/user.model.js";
 
@@ -106,7 +107,13 @@ export async function sendMessage(req, res) {
       video: videoUrl,
     });
 
-    //todo: realtime with socket.io
+    // realtime with socket.io
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    // checking if the user is online or not if online send the event with message
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
     res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage", error.message);
